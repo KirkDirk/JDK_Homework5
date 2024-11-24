@@ -39,8 +39,10 @@ public class Main {
                         throw new RuntimeException(e);
                     }
                     if (currentPhil.isPhilsEatState()){
+                        System.out.println(currentPhil.isPhilsEatState());
                         currentPhil.setPhilsEatState(false);
                         System.out.println(currentPhil + Integer.toString(i + 1) + " think");
+                        System.out.println(currentPhil.isPhilsEatState());
                     } else {
                         currentPhil.philSnack();
                         System.out.println(currentPhil + Integer.toString(i + 1) + " eat");
@@ -52,17 +54,19 @@ public class Main {
         Runnable stateSnacking = new Runnable() {
             @Override
             public void run() {
-                try {
-                    Thread.sleep(2000);
-                } catch (InterruptedException e) {
-                    throw new RuntimeException(e);
-                }
-                System.out.println("Phils have a snack:");
-                for (int i = 0; i < countPhil; i++) {
-                    System.out.println("Phil " + Integer.toString(i + 1) +
-                            " had a snack " +
-                            (countSnacks - philList.get(i).getCdlSnacks().getCount()) +
-                            " times");
+                while (!(cdlCountSnacks.getCount() == 0)) {
+                    try {
+                        Thread.sleep(2000);
+                    } catch (InterruptedException e) {
+                        throw new RuntimeException(e);
+                    }
+                    System.out.println("Phils have a snack:");
+                    for (int i = 0; i < countPhil; i++) {
+                        System.out.println("Phil " + Integer.toString(i + 1) +
+                                " had a snack " +
+                                (countSnacks - philList.get(i).getCdlSnacks().getCount()) +
+                                " times");
+                    }
                 }
 
             }
