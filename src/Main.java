@@ -20,10 +20,19 @@ public class Main {
 
     public static void main(String[] args) throws InterruptedException {
 
+        /**
+         * Заданное количество философов
+         */
         int countPhil = 5;
+        /**
+         * Заданное количество приемов пищи
+         */
         int countSnacks = 3;
-        CountDownLatch cdlCountSnacks = new CountDownLatch(countSnacks);
+        //CountDownLatch cdlCountSnacks = new CountDownLatch(countSnacks);
         //List<Phil> philList = new ArrayList<>();
+        /**
+         * Массив вилок по числу философов
+         */
         Lock[] forks = new Lock[countPhil];
         for (int i = 0; i < countPhil; i++) {
             //Phil phil = new Phil();
@@ -76,13 +85,15 @@ public class Main {
 //            }
 //        };
 
+        /**
+         * Создаем перекус в числе потоков по числу философов
+         */
         Thread[] snakingThread = new Thread[countPhil];
         for (int i = 0; i < countPhil; i++) {
             System.out.println("Phil " + (i +1) + " begins to eat");
             snakingThread[i] = new Thread(new Phil(
                     i,
-                    false,
-                    cdlCountSnacks,
+                    countSnacks,
                     forks[i],
                     forks[(i+countPhil-1)%countPhil]));
             snakingThread[i].start();
@@ -91,7 +102,17 @@ public class Main {
 //        Thread getStateSnacking = new Thread(stateSnacking);
 //        getStateSnacking.start();
 
-        cdlCountSnacks.await();
+//        cdlCountSnacks.await();
 
+        /**
+         * Дожидаемся окончания трапезы
+         */
+        try {
+            for (Thread phil : snakingThread) {
+                phil.join();
+            }
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+        }
     }
 }
